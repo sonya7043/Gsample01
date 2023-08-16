@@ -15,6 +15,6 @@ public class MainController {
 		Map<String, Object> map = new HashMap<>();
 		map.put("index", "hello world");
 		
-		return ResponseEntity.ok(map);
+		return ResponseEntity.ok().body(map);
 	}
 }
