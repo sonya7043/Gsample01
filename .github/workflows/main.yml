@@ -1,4 +1,4 @@
-name: Java ci/cd with Gradle
+name: Java ci/cd with Gradle and Docker
 
 on: 
   push:
@@ -42,7 +42,7 @@ jobs:
 
   deploy:
     needs: build
-    name: deploy
+    name: Deploy
     runs-on: [self-hosted, label-1]
     steps:
       - name: Docker login
@@ -51,7 +51,12 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: docker run
+      - name: Stop and remove existing container
         run: |
-          docker stop gs01 && docker rm gs01 && docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/gsample01:latest
+          docker stop gs01 || true
+          docker rm gs01 || true
+          docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/gsample01:latest || true
+
+      - name: Run Docker container
+        run: |
           docker run -d --name gs01 -p 50005:50005 ${{ secrets.DOCKERHUB_USERNAME }}/gsample01:latest
