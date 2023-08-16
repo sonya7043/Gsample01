@@ -9,6 +9,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class MainController {
+	
+	@GetMapping("health")
+	public ResponseEntity<?> health() {
+		Map<String, Object> map = new HashMap<>();
+		map.put("status", "ok");
+		
+		return ResponseEntity.ok().body(map);
+	}
 
 	@GetMapping({"","/"})
 	public ResponseEntity<?> index() {
